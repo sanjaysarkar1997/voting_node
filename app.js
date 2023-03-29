@@ -20,7 +20,7 @@ const contract = new web3.eth.Contract(abi);
 
 // get the accounts from the local node
 
-const contractAddress = "0xD66e8C6a61FB784f764495ac6944Cb3303589D97";
+const contractAddress = "0xfafCb995e6e3281bfb65036cE6907661E8daF3ab";
 
 // set the contract address
 contract.options.address = contractAddress;
@@ -165,7 +165,9 @@ app.get("/start-vote", async (req, res) => {
       message: "Start Vote",
       data: startVote,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.log(error)
+  }
 });
 
 console.log(contract.methods);
