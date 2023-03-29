@@ -3,20 +3,19 @@
 pragma solidity >=0.7.0 <0.9.0;
 pragma abicoder v2;
 
-/** 
+/**
  * @title Ballot
  * @dev Implements voting process along with vote delegation
  */
 contract Ballot {
-   
     struct Voter {
         uint weight; // weight is accumulated by delegation
-        bool voted;  // if true, that person already voted
-        uint vote;   // index of the voted proposal
+        bool voted; // if true, that person already voted
+        uint vote; // index of the voted proposal
     }
 
     struct Candidate {
-        string name;   // candidate name 
+        string name; // candidate name
         uint voteCount; // number of accumulated votes
     }
 
@@ -25,25 +24,25 @@ contract Ballot {
     mapping(address => Voter) public voters;
 
     Candidate[] public candidates;
-    
-    enum State { Created, Voting, Ended } // State of voting period
-    
+
+    enum State {
+        Created,
+        Voting,
+        Ended
+    } // State of voting period
+
     State public state;
 
     constructor(string[] memory candidateNames) {
         chairperson = msg.sender;
         voters[chairperson].weight = 1;
         state = State.Created;
-        
+
         for (uint i = 0; i < candidateNames.length; i++) {
-            candidates.push(Candidate({
-                name: candidateNames[i],
-                
-                voteCount: 0
-            }));
+            candidates.push(Candidate({name: candidateNames[i], voteCount: 0}));
         }
     }
-    
+
     // MODIFIERS
     modifier onlySmartContractOwner() {
         require(
@@ -52,66 +51,58 @@ contract Ballot {
         );
         _;
     }
-    
+
     modifier CreatedState() {
         require(state == State.Created, "it must be in Started");
         _;
     }
-    
+
     modifier VotingState() {
         require(state == State.Voting, "it must be in Voting Period");
         _;
     }
-    
+
     modifier EndedState() {
         require(state == State.Ended, "it must be in Ended Period");
         _;
     }
-    
-    function addCandidates(string[] memory candidateNames) 
-        public 
-        EndedState
-    {
+
+    function addCandidates(string[] memory candidateNames) public EndedState {
         state = State.Created;
         for (uint i = 0; i < candidateNames.length; i++) {
-            candidates.push(Candidate({
-                name: candidateNames[i],
-                voteCount: 0
-            }));
+            candidates.push(Candidate({name: candidateNames[i], voteCount: 0}));
         }
     }
-    
+
     // to start the voting period
-    function startVote() 
-        public
-        onlySmartContractOwner
-        CreatedState
-    {
+    function startVote() public onlySmartContractOwner CreatedState {
         state = State.Voting;
     }
-    
-    /*    
+
+    /*
      * to end the voting period
      * can only end if the state in Voting period
-    */
-    function endVote() 
-        public 
-        onlySmartContractOwner
-        VotingState
-    {
+     */
+    function endVote() public onlySmartContractOwner VotingState {
         state = State.Ended;
     }
-    
 
-    function giveRightToVoterInBulk(address[] memory voterList)
-    public
-    CreatedState
-    {
-        for(uint i=0; i<voterList.length; i++){
+    /*
+     * to get all candidates
+     *
+     */
+    function getCandidates() public view returns (Candidate[] memory) {
+        return candidates;
+    }
+
+    function giveRightToVoterInBulk(
+        address[] memory voterList
+    ) public CreatedState {
+        for (uint i = 0; i < voterList.length; i++) {
             giveRightToVote(voterList[i]);
         }
     }
-    
+
     /** 
      * @dev Give 'voter' the right to vote on this ballot. 
      May only be called by 'chairperson'.
@@ -122,10 +113,7 @@ contract Ballot {
             msg.sender == chairperson,
             "Only chairperson can give right to vote."
         );
-        require(
-            !voters[voter].voted,
-            "The voter already voted."
-        );
+        require(!voters[voter].voted, "The voter already voted.");
         require(voters[voter].weight == 0);
         voters[voter].weight = 1;
     }
@@ -135,10 +123,7 @@ contract Ballot {
      candidate 'candidates[candidate].name'.
      * @param candidate index of candidate in the candidates array
      */
-    function vote(uint candidate) 
-        public
-        VotingState
-    {
+    function vote(uint candidate) public VotingState {
         Voter storage sender = voters[msg.sender];
         require(sender.weight != 0, "Has no right to vote");
         require(!sender.voted, "Already voted.");
@@ -151,10 +136,10 @@ contract Ballot {
         candidates[candidate].voteCount += sender.weight;
     }
 
-    function winningCandidate() 
+    function winningCandidate()
         public
-        EndedState
         view
+        EndedState
         returns (string memory winnerName_)
     {
         uint winningVoteCount = 0;
