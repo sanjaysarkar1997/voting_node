@@ -87,6 +87,7 @@ router.get("/get-candidates", async (req, res) => {
       status: true,
     });
   } catch (error) {
+    console.log(error);
     res.json({
       message: "Error",
       data: error,
@@ -98,7 +99,7 @@ router.get("/get-candidates", async (req, res) => {
 // get the list of candidates
 router.get("/candidate/:id", async (req, res) => {
   try {
-    const contract = createContractInstance(abi, req.query.contractAddress);
+    const contract = createContractInstance(req.query.contractAddress);
 
     const candidate = await contract.methods.candidates(req.params.id).call();
     res.json({
@@ -179,6 +180,8 @@ router.get("/last-block-details", async (req, res) => {
 
 router.get("/get-state", async (req, res) => {
   try {
+    const contract = createContractInstance(req.query.contractAddress);
+
     const state = await contract.methods.state().call();
     res.json({
       message: "State",
