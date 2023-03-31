@@ -5,7 +5,7 @@ const getRequests = async (url: string, query?: object) => {
     const response = await service.get(url, {
       params: query,
     });
-    if (response.status) {
+    if (response.data.status) {
       return {
         status: true,
         data: response.data.data,
@@ -30,7 +30,7 @@ const getRequests = async (url: string, query?: object) => {
 const postRequests = async (url: string, body: object) => {
   try {
     const response = await service.post(url, body);
-    if (response.status === 200) {
+    if (response.data.status) {
       return {
         status: true,
         data: response.data.data,

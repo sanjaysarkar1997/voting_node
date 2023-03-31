@@ -1,4 +1,4 @@
-import { Button, Col, Row, Select } from "antd";
+import { Button, Col, Row, Select, message } from "antd";
 import { getRequests, postRequests } from "../apis/api";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -24,7 +24,11 @@ const Voting = () => {
   const getAPI = async () => {
     try {
       const response = await getRequests("block-chain/get-accounts");
-      if (response.status) setAccouts(response.data);
+      if (response.status) {
+        setAccouts(response.data);
+      } else {
+        message.error("Something went wrong");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -32,10 +36,6 @@ const Voting = () => {
 
   useEffect(() => {
     getAPI();
-
-    return () => {
-      setAccouts([]);
-    };
   }, []);
 
   return (
@@ -83,6 +83,7 @@ const Voting = () => {
               key="chairman"
               onChange={(value) => {
                 console.log(value);
+                localStorage.setItem("chairperson", value);
                 setChairman(value);
               }}
             >

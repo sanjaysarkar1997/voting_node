@@ -6,7 +6,6 @@ import { List, Typography, Button, message, Tag } from "antd";
 const GiveVoteToCandidate = () => {
   // extract the id from the url
   const { id } = useParams();
-  const [candidate, setCandidate] = useState("");
   const [candidates, setCandidates] = useState([]);
   const [state, setState] = useState("");
 
@@ -23,11 +22,17 @@ const GiveVoteToCandidate = () => {
     }
   };
 
-  const giveVoteToCandidate = async () => {
+  const giveVoteToCandidate = async (index: number) => {
     try {
+      console.log(candidates);
+      const candidateId = candidates[index][0];
+
+      console.log(candidateId);
+
       const response = await getRequests("block-chain/give-vote-to-candidate", {
         contractAddress: localStorage.getItem("contractAddress"),
-        candidateId: id,
+        candidateId: candidateId,
+        voterId: id,
       });
       if (response.status) {
         message.success("Voting submitted successfully");
@@ -45,6 +50,7 @@ const GiveVoteToCandidate = () => {
       const response = await getRequests("block-chain/get-state", {
         contractAddress: localStorage.getItem("contractAddress"),
       });
+      console.log(response);
       if (response.status) {
         setState(response.data);
       } else {
@@ -70,8 +76,13 @@ const GiveVoteToCandidate = () => {
           dataSource={candidates}
           renderItem={(item, i) => (
             <List.Item>
-              <Typography.Text mark>[Candidate {i + 1}]</Typography.Text> {item}{" "}
-              <Button type="primary" onClick={giveVoteToCandidate} size="small">
+              <Typography.Text mark>[Candidate {i + 1}]</Typography.Text>{" "}
+              {item[0]}{" "}
+              <Button
+                type="primary"
+                onClick={() => giveVoteToCandidate(i)}
+                size="small"
+              >
                 Vote
               </Button>
             </List.Item>

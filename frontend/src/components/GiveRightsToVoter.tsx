@@ -5,10 +5,11 @@ import { useState, useEffect } from "react";
 const GiveRightsToVoter = () => {
   const [voterAddress, setVoterAddress] = useState([]);
 
-  const giveRightsToVoter = async () => {
+  const giveRightsToVoter = async (voter: string) => {
     const response = await postRequests("block-chain/give-rights-to-voter", {
       contractAddress: localStorage.getItem("contractAddress"),
-      voterAddress,
+      voter,
+      chairperson: localStorage.getItem("chairperson"),
     });
     if (response.status) {
       message.success("Voter rights given successfully");
@@ -16,10 +17,14 @@ const GiveRightsToVoter = () => {
   };
 
   const giveRightsToVoterToAll = async () => {
-    const response = await postRequests("block-chain/give-rights-to-voter", {
-      contractAddress: localStorage.getItem("contractAddress"),
-      voterAddress,
-    });
+    const response = await postRequests(
+      "block-chain/give-rights-to-voter-bulk",
+      {
+        contractAddress: localStorage.getItem("contractAddress"),
+        voterAddress,
+        chairperson: localStorage.getItem("chairperson"),
+      }
+    );
     if (response.status) {
       message.success("Voter rights given successfully");
     }
@@ -28,13 +33,18 @@ const GiveRightsToVoter = () => {
   const getAccounts = async () => {
     const response = await getRequests("block-chain/get-accounts");
     if (response.status) {
-      setVoterAddress(response.data);
+      setVoterAddress(
+        response.data.filter(
+          (item: string) => item !== localStorage.getItem("chairperson")
+        )
+      );
     }
   };
 
   const startVoting = async () => {
     const response = await getRequests("block-chain/start-voting", {
       contractAddress: localStorage.getItem("contractAddress"),
+      chairperson: localStorage.getItem("chairperson"),
     });
     if (response.status) {
       message.success("Voting started successfully");
@@ -58,7 +68,7 @@ const GiveRightsToVoter = () => {
             <div>
               <Button
                 type="primary"
-                onClick={giveRightsToVoterToAll}
+                onClick={() => giveRightsToVoterToAll()}
                 size="small"
               >
                 Give Rights To All
@@ -70,7 +80,11 @@ const GiveRightsToVoter = () => {
           renderItem={(item, i) => (
             <List.Item>
               <Typography.Text mark>[Candidate {i + 1}]</Typography.Text> {item}{" "}
-              <Button type="primary" onClick={giveRightsToVoter} size="small">
+              <Button
+                type="primary"
+                onClick={() => giveRightsToVoter(item)}
+                size="small"
+              >
                 Give Rights
               </Button>
             </List.Item>

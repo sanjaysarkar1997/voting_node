@@ -15,11 +15,14 @@ router.get("/get-accounts", async (req, res) => {
     res.json({
       message: "Accounts",
       data: accounts,
+      status: true,
     });
   } catch (error) {
+    console.log(error);
     res.json({
       message: "Error",
       data: error,
+      status: false,
     });
   }
 });
@@ -186,27 +189,111 @@ router.get("/get-state", async (req, res) => {
     res.json({
       message: "State",
       data: state,
+      status: true,
     });
   } catch (error) {
     res.json({
       message: "Error",
       data: error,
+      status: false,
     });
   }
 });
 
-router.get("/start-vote", async (req, res) => {
+router.get("/start-voting", async (req, res) => {
   try {
+    const contract = createContractInstance(req.query.contractAddress);
     const startVote = await contract.methods.startVote().send({
-      from: "0x33aA085c92cCF1c13b040a716f21A3B692B880d6",
+      from: req.query.chairperson,
       gas: 5000000,
     });
     res.json({
       message: "Start Vote",
       data: startVote,
+      status: true,
+    });
+  } catch (error) {
+    res.json({
+      message: "Error",
+      data: error,
+      status: false,
+    });
+  }
+});
+
+// give rights to vote to a voter
+router.post("/give-rights-to-voter", async (req, res) => {
+  try {
+    const contract = createContractInstance(req.body.contractAddress);
+
+    // console.log()
+    const giveRightToVote = await contract.methods
+      .giveRightToVote(req.body.voter)
+      .send({
+        from: req.body.chairperson,
+        gas: 5000000,
+      });
+    res.json({
+      message: "Give Right To Vote",
+      data: giveRightToVote,
+      status: true,
+    });
+  } catch (error) {
+    res.json({
+      message: "Error",
+      data: error,
+      status: false,
+    });
+  }
+});
+
+router.post("/give-rights-to-voter-bulk", async (req, res) => {
+  try {
+    const contract = createContractInstance(req.body.contractAddress);
+    const giveRightToVoterInBulk = await contract.methods
+      .giveRightToVoterInBulk([req.body.voter])
+      .send({
+        from: req.body.chairperson,
+        gas: 5000000,
+      });
+    res.json({
+      message: "Give Right To Vote bulk",
+      data: giveRightToVote,
+      status: true,
+    });
+  } catch (error) {
+    res.json({
+      message: "Error",
+      data: error,
+      status: false,
+    });
+  }
+});
+
+router.get("/give-vote-to-candidate", async (req, res) => {
+  try {
+    const contract = createContractInstance(req.query.contractAddress);
+
+    console.log(req.query);
+
+    const giveVoteToCandidate = await contract.methods
+      .vote(req.query.candidateId)
+      .send({
+        from: req.query.voterId,
+        gas: 5000000,
+      });
+    res.json({
+      message: "Give Vote To Candidate",
+      data: giveVoteToCandidate,
+      status: true,
     });
   } catch (error) {
     console.log(error);
+    res.json({
+      message: "Error",
+      data: error,
+      status: false,
+    });
   }
 });
 
