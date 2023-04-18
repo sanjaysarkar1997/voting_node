@@ -108,26 +108,13 @@ router.get("/candidate/:id", async (req, res) => {
     res.json({
       message: "Candidate",
       data: candidate,
+      status: true,
     });
   } catch (error) {
     res.json({
       message: "Error",
       data: error,
-    });
-  }
-});
-
-router.get("/wining-candidate", async (req, res) => {
-  try {
-    const winingCandidate = await contract.methods.winningCandidate().call();
-    res.json({
-      message: "Wining Candidate",
-      data: winingCandidate,
-    });
-  } catch (error) {
-    res.json({
-      message: "Error",
-      data: error,
+      status: false,
     });
   }
 });
@@ -261,6 +248,31 @@ router.get("/wining-candidate", async (req, res) => {
       status: true,
     });
   } catch (error) {
+    res.json({
+      message: "Error",
+      data: error,
+      status: false,
+    });
+  }
+});
+
+// get candidate vote
+router.get("/get-candidate-details", async (req, res) => {
+  try {
+    const contract = createContractInstance(req.query.contractAddress);
+    console.log(contract);
+    const candidateVote = await contract.methods
+      .candidates(req.query.candidateId)
+      .call();
+    res.json({
+      message: "Candidate Vote",
+      data: candidateVote,
+      status: true,
+    });
+
+    console.log(candidateVote);
+  } catch (error) {
+    console.log(error);
     res.json({
       message: "Error",
       data: error,
