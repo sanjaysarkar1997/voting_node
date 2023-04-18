@@ -5,6 +5,8 @@ import GiveRightsToVoter from "../components/GiveRightsToVoter";
 import Home from "../components/Home";
 import Voting from "../components/Voting";
 import GiveVoteToCandidate from "../components/GiveVoteToCandidate";
+import EndVote from "../components/EndVote";
+import WiningCandidate from "../components/WiningCandidate";
 
 const AllRoutes = () => {
   return (
@@ -17,6 +19,10 @@ const AllRoutes = () => {
         path="/give-vote-to-candidate/:id"
         element={<GiveVoteToCandidate />}
       />
+      <Route path="/end-vote" element={<EndVote />} />
+
+      <Route path="/wining-candidate" element={<WiningCandidate />} />
+
       <Route path="*" element={<h1>404 Not Found</h1>} />
     </Routes>
   );

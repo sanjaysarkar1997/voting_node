@@ -25,7 +25,7 @@ const GiveVoteToCandidate = () => {
   const giveVoteToCandidate = async (index: number) => {
     try {
       console.log(candidates);
-      const candidateId = candidates[index][0];
+      const candidateId = index;
 
       console.log(candidateId);
 

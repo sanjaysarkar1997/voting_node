@@ -186,6 +186,10 @@ router.get("/get-state", async (req, res) => {
     const contract = createContractInstance(req.query.contractAddress);
 
     const state = await contract.methods.state().call();
+
+    console.log("state");
+    console.log(state);
+
     res.json({
       message: "State",
       data: state,
@@ -210,6 +214,50 @@ router.get("/start-voting", async (req, res) => {
     res.json({
       message: "Start Vote",
       data: startVote,
+      status: true,
+    });
+  } catch (error) {
+    res.json({
+      message: "Error",
+      data: error,
+      status: false,
+    });
+  }
+});
+
+// end vote
+router.get("/end-voting", async (req, res) => {
+  try {
+    const contract = createContractInstance(req.query.contractAddress);
+    const endVote = await contract.methods.endVote().send({
+      from: req.query.chairperson,
+      gas: 5000000,
+    });
+
+    console.log(endVote);
+
+    res.json({
+      message: "End Vote",
+      data: endVote,
+      status: true,
+    });
+  } catch (error) {
+    res.json({
+      message: "Error",
+      data: error,
+      status: false,
+    });
+  }
+});
+
+// wining-candidate
+router.get("/wining-candidate", async (req, res) => {
+  try {
+    const contract = createContractInstance(req.query.contractAddress);
+    const winingCandidate = await contract.methods.winningCandidate().call();
+    res.json({
+      message: "Wining Candidate",
+      data: winingCandidate,
       status: true,
     });
   } catch (error) {
@@ -280,7 +328,7 @@ router.get("/give-vote-to-candidate", async (req, res) => {
       .vote(req.query.candidateId)
       .send({
         from: req.query.voterId,
-        gas: 5000000,
+        gas: 1500000,
       });
     res.json({
       message: "Give Vote To Candidate",
