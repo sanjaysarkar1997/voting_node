@@ -78,7 +78,9 @@ const GiveRightsToVoter = () => {
           bordered
           dataSource={voterAddress}
           renderItem={(item: any, i) => (
-            <List.Item>
+            <List.Item
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
               <Typography.Text mark>[Candidate {i + 1}]</Typography.Text>{" "}
               {item.name}{" "}
               <Button
