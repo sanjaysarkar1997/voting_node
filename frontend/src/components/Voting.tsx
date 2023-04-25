@@ -52,15 +52,15 @@ const Voting = () => {
               key={"candidates"}
               mode="multiple"
               onChange={(value) => {
-                console.log(value);
+                console.log(value, chairman);
                 setSelectedCandidate(value);
               }}
             >
               {accouts
-                .filter((ele) => ele !== chairman)
+                .filter((ele: any) => ele.address !== chairman)
                 .map((account: any) => (
-                  <Select.Option key={account} value={account}>
-                    {account}
+                  <Select.Option key={account.address} value={account.address}>
+                    {account.name}
                   </Select.Option>
                 ))}
             </Select>
@@ -89,7 +89,7 @@ const Voting = () => {
             >
               {accouts.map((account: any) => (
                 <Select.Option
-                  key={account}
+                  key={account.address}
                   value={account.address}
                   //   onClick={() => deployContract(account)}
                 >

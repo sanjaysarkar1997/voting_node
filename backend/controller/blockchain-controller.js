@@ -13,15 +13,11 @@ const router = require("express").Router();
 router.get("/get-accounts", async (req, res) => {
   try {
     const accounts = await web3.eth.getAccounts();
-    console.log(walletData);
+
     res.json({
       message: "Accounts",
-      data: accounts.map((account, i) => {
-        return {
-          address: account,
-          phone: walletData[i].phoneNo,
-          name: walletData[i].name,
-        };
+      data: accounts.map((account) => {
+        return walletData[account];
       }),
       status: true,
     });
