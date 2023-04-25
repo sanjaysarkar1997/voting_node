@@ -77,12 +77,13 @@ const GiveRightsToVoter = () => {
           }
           bordered
           dataSource={voterAddress}
-          renderItem={(item, i) => (
+          renderItem={(item: any, i) => (
             <List.Item>
-              <Typography.Text mark>[Candidate {i + 1}]</Typography.Text> {item}{" "}
+              <Typography.Text mark>[Candidate {i + 1}]</Typography.Text>{" "}
+              {item.name}{" "}
               <Button
                 type="primary"
-                onClick={() => giveRightsToVoter(item)}
+                onClick={() => giveRightsToVoter(item.address)}
                 size="small"
               >
                 Give Rights

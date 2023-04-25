@@ -10,6 +10,25 @@ let bytecode =
 
 const router = require("express").Router();
 
+router.get("/get-wallet-address", async (req, res) => {
+  try {
+    const accounts = await web3.eth.getAccounts();
+
+    res.json({
+      message: "Accounts",
+      data: accounts,
+      status: true,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      message: "Error",
+      data: error,
+      status: false,
+    });
+  }
+});
+
 router.get("/get-accounts", async (req, res) => {
   try {
     const accounts = await web3.eth.getAccounts();
@@ -17,7 +36,7 @@ router.get("/get-accounts", async (req, res) => {
     res.json({
       message: "Accounts",
       data: accounts.map((account) => {
-        return walletData[account];
+        return { ...walletData[account], address: account };
       }),
       status: true,
     });
@@ -90,7 +109,12 @@ router.get("/get-candidates", async (req, res) => {
 
     res.json({
       message: "Candidates",
-      data: candidates,
+      data: candidates.map((candidate) => {
+        return {
+          ...walletData[candidate[0]],
+          address: candidate[0],
+        };
+      }),
       status: true,
     });
   } catch (error) {

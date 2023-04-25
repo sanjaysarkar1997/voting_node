@@ -28,13 +28,13 @@ const Candidates = () => {
       </Col>
       <Col span={24}>
         <List
-          header={<div>Header</div>}
-          footer={<div>Footer</div>}
+          // header={<div>Header</div>}
+          // footer={<div>Footer</div>}
           bordered
           dataSource={candidates}
           renderItem={(item, i) => (
             <List.Item>
-              <Typography.Text mark>[Candidate {i + 1}]</Typography.Text> {item}
+              <Typography.Text mark>[Candidate {i + 1}]</Typography.Text> {item.name}
             </List.Item>
           )}
         />
