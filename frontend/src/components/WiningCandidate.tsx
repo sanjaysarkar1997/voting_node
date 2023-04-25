@@ -23,7 +23,7 @@ export default function WiningCandidate() {
     }
   };
 
-  const [data, setData] = useState({});
+  const [data, setData] = useState<any>({});
 
   const winingCandidate = async () => {
     try {
@@ -32,7 +32,6 @@ export default function WiningCandidate() {
       });
 
       if (response.status) {
-        message.success("Wining candidate is " + response.data);
         setData(response.data);
       } else {
         message.error("Wining candidate not found");
@@ -81,7 +80,7 @@ export default function WiningCandidate() {
       <Row gutter={[16, 16]}>
         <Col>
           <h1>Wining Candidates</h1>
-          <Tag color="red">{JSON.stringify(data)}</Tag>
+          <Tag color="green">{JSON.stringify(data.name)}</Tag>
           <h2>Candidate Voting Details</h2>
           <List
             bordered

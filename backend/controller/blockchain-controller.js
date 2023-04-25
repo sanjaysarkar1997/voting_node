@@ -111,8 +111,10 @@ router.get("/get-candidates", async (req, res) => {
     res.json({
       message: "Candidates",
       data: candidates.map((candidate) => {
+        console.log(candidate.name);
+        console.log(walletData[candidate.name]);
         return {
-          ...walletData[candidate[0]],
+          ...walletData[candidate.name],
           address: candidate[0],
         };
       }),
@@ -273,7 +275,7 @@ router.get("/wining-candidate", async (req, res) => {
     const winingCandidate = await contract.methods.winningCandidate().call();
     res.json({
       message: "Wining Candidate",
-      data: winingCandidate,
+      data: walletData[winingCandidate],
       status: true,
     });
   } catch (error) {
@@ -295,7 +297,10 @@ router.get("/get-candidate-details", async (req, res) => {
       .call();
     res.json({
       message: "Candidate Vote",
-      data: candidateVote,
+      data: {
+        ...walletData[candidateVote.name],
+        voteCount: candidateVote.voteCount,
+      },
       status: true,
     });
 
@@ -316,10 +321,14 @@ router.post("/give-rights-to-voter", async (req, res) => {
     const contract = createContractInstance(req.body.contractAddress);
 
     // console.log()
-    const token = jwt.sign({ 
-        ...walletData[req.body.voter], 
-        contractAdress: req.body.contractAddress 
-      }, 'ascbchjabcjascbj');
+    const token = jwt.sign(
+      {
+        ...walletData[req.body.voter],
+        contractAdress: req.body.contractAddress,
+        voterId: req.body.voter,
+      },
+      "ascbchjabcjascbj"
+    );
 
     const giveRightToVote = await contract.methods
       .giveRightToVote(req.body.voter)
@@ -345,21 +354,21 @@ router.post("/give-rights-to-voter", async (req, res) => {
   }
 });
 
-router.get("/token-decode", async (req, res) => {
+router.get("/verify-voter", async (req, res) => {
   try {
-    const decoded = jwt.verify(req.body.token, 'ascbchjabcjascbj');
+    const decoded = jwt.verify(req.query.token, "ascbchjabcjascbj");
     // console.log(decoded.otp);
     res.json({
       message: "JWT token decoded",
       data: decoded,
       status: true,
-    })
+    });
   } catch (error) {
     res.json({
       message: "Error",
       data: error.message,
       status: false,
-    })
+    });
   }
 });
 

@@ -1,8 +1,11 @@
 import { Button, Col, Row, message } from "antd";
 import React from "react";
 import { getRequests } from "../apis/api";
+import { useNavigate } from "react-router";
 
 export default function EndVote() {
+  const navigate = useNavigate();
+
   const endVote = async () => {
     try {
       const response = await getRequests("block-chain/end-voting", {
@@ -11,6 +14,7 @@ export default function EndVote() {
       });
       if (response.status) {
         message.success("Voting ended successfully");
+        navigate("/wining-candidate");
       } else {
         message.error("Voting not ended");
       }
@@ -25,7 +29,6 @@ export default function EndVote() {
         <Button type="primary" onClick={() => endVote()}>
           End Vote
         </Button>
-        
       </Col>
     </Row>
   );
