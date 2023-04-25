@@ -4,8 +4,12 @@ import { getRequests } from "../apis/api";
 import { List, Typography, Button, message, Tag } from "antd";
 
 const GiveVoteToCandidate = () => {
-  // extract the id from the url
-  const { id } = useParams();
+  // extract token query param from url
+
+  const token = new URLSearchParams(window.location.search).get("token");
+
+
+  console.log(token);
   const [candidates, setCandidates] = useState([]);
   const [state, setState] = useState("");
 
@@ -16,28 +20,6 @@ const GiveVoteToCandidate = () => {
       });
       if (response.status) {
         setCandidates(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const giveVoteToCandidate = async (index: number) => {
-    try {
-      console.log(candidates);
-      const candidateId = index;
-
-      console.log(candidateId);
-
-      const response = await getRequests("block-chain/give-vote-to-candidate", {
-        contractAddress: localStorage.getItem("contractAddress"),
-        candidateId: candidateId,
-        voterId: id,
-      });
-      if (response.status) {
-        message.success("Voting submitted successfully");
-      } else {
-        message.error("Voting not submitted");
       }
     } catch (error) {
       console.log(error);
@@ -71,7 +53,7 @@ const GiveVoteToCandidate = () => {
       {state === "0" && <Tag color={"red"}>Voting not started</Tag>}
       {state === "1" && (
         <List
-          header={<Tag color={"blue"}>Voter Id: {id}</Tag>}
+          header={<Tag color={"blue"}>Voter Id</Tag>}
           bordered
           dataSource={candidates}
           renderItem={(item, i) => (
@@ -80,7 +62,7 @@ const GiveVoteToCandidate = () => {
               {item[0]}{" "}
               <Button
                 type="primary"
-                onClick={() => giveVoteToCandidate(i)}
+                // onClick={() => giveVoteToCandidate(i)}
                 size="small"
               >
                 Vote

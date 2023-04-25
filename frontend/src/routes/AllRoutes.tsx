@@ -15,10 +15,7 @@ const AllRoutes = () => {
       <Route path="/voting" element={<Voting />} />
       <Route path="/get-candidates" element={<Candidates />} />
       <Route path="/give-rights-to-voter" element={<GiveRightsToVoter />} />
-      <Route
-        path="/give-vote-to-candidate/:id"
-        element={<GiveVoteToCandidate />}
-      />
+      <Route path="/give-vote-to-candidate" element={<GiveVoteToCandidate />} />
       <Route path="/end-vote" element={<EndVote />} />
 
       <Route path="/wining-candidate" element={<WiningCandidate />} />
