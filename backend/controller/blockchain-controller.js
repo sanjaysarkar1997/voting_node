@@ -320,7 +320,7 @@ router.post("/give-rights-to-voter", async (req, res) => {
         ...walletData[req.body.voter], 
         contractAdress: req.body.contractAddress 
       }, 'ascbchjabcjascbj');
-      
+
     const giveRightToVote = await contract.methods
       .giveRightToVote(req.body.voter)
       .send({
@@ -339,6 +339,24 @@ router.post("/give-rights-to-voter", async (req, res) => {
       data: error.message,
       status: false,
     });
+  }
+});
+
+router.get("/token-decode", async (req, res) => {
+  try {
+    const decoded = jwt.verify(req.body.token, 'ascbchjabcjascbj');
+    // console.log(decoded.otp);
+    res.json({
+      message: "JWT token decoded",
+      data: decoded,
+      status: true,
+    })
+  } catch (error) {
+    res.json({
+      message: "Error",
+      data: error.message,
+      status: false,
+    })
   }
 });
 
