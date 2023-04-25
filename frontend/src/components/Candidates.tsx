@@ -24,7 +24,7 @@ const Candidates = () => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <h2 style={{ marginBottom: 0 }}>Candidates Ids</h2>
+        <h2 style={{ marginBottom: 0 }}>Candidates </h2>
       </Col>
       <Col span={24}>
         <List
@@ -32,9 +32,10 @@ const Candidates = () => {
           // footer={<div>Footer</div>}
           bordered
           dataSource={candidates}
-          renderItem={(item, i) => (
+          renderItem={(item: any, i) => (
             <List.Item>
-              <Typography.Text mark>[Candidate {i + 1}]</Typography.Text> {item.name}
+              <Typography.Text mark>[Candidate {i + 1}]</Typography.Text>{" "}
+              {item.name}
             </List.Item>
           )}
         />

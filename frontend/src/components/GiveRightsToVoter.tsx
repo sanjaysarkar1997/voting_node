@@ -13,6 +13,8 @@ const GiveRightsToVoter = () => {
     });
     if (response.status) {
       message.success("Voter rights given successfully");
+    } else {
+      message.error("Voter rights failed");
     }
   };
 
@@ -35,7 +37,7 @@ const GiveRightsToVoter = () => {
     if (response.status) {
       setVoterAddress(
         response.data.filter(
-          (item: string) => item !== localStorage.getItem("chairperson")
+          (item: any) => item.address !== localStorage.getItem("chairperson")
         )
       );
     }
@@ -78,7 +80,9 @@ const GiveRightsToVoter = () => {
           bordered
           dataSource={voterAddress}
           renderItem={(item: any, i) => (
-            <List.Item>
+            <List.Item
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
               <Typography.Text mark>[Candidate {i + 1}]</Typography.Text>{" "}
               {item.name}{" "}
               <Button
