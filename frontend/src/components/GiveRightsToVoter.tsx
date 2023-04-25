@@ -1,9 +1,12 @@
 import { message, Row, Col, List, Typography, Button } from "antd";
 import { getRequests, postRequests } from "../apis/api";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 const GiveRightsToVoter = () => {
   const [voterAddress, setVoterAddress] = useState([]);
+
+  const navigate = useNavigate();
 
   const giveRightsToVoter = async (voter: string) => {
     const response = await postRequests("block-chain/give-rights-to-voter", {
@@ -50,6 +53,7 @@ const GiveRightsToVoter = () => {
     });
     if (response.status) {
       message.success("Voting started successfully");
+      navigate("/end-vote");
     } else {
       message.error("Voting not started");
     }
