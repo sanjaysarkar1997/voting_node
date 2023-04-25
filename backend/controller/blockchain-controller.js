@@ -321,6 +321,9 @@ router.post("/give-rights-to-voter", async (req, res) => {
         from: req.body.chairperson,
         gas: 5000000,
       });
+    
+      
+
     res.json({
       message: "Give Right To Vote",
       data: giveRightToVote,
