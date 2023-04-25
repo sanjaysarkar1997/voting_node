@@ -90,10 +90,10 @@ const Voting = () => {
               {accouts.map((account: any) => (
                 <Select.Option
                   key={account}
-                  value={account}
+                  value={account.address}
                   //   onClick={() => deployContract(account)}
                 >
-                  {account}
+                  {account.name}
                 </Select.Option>
               ))}
             </Select>
