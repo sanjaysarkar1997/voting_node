@@ -38,7 +38,7 @@ const Voting = () => {
     getAPI();
   }, []);
 
-  useEffect(() => {
+  useEffect(() => { 
     localStorage.getItem("chairperson") &&
       setChairman(localStorage.getItem("chairperson"));
   }, []);

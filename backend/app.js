@@ -4,7 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
 const blockchain = require("./controller/blockchain-controller");
-const walletData = require("./data/data");
+const accounts = require("./data/accounts");
 
 app.use(bodyParser.json());
 
@@ -18,7 +18,7 @@ app.use("/api/login", (req, res) => {
       status: true,
       message: "Login successful",
       data: {
-        chairman: "0x14791697260E4c9A71f18484C9f997B308e59325",
+        chairman: accounts[0],
       },
     });
   } else {
