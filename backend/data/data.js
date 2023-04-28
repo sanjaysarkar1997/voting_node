@@ -145,7 +145,6 @@ let accounts = [
   "0xC7744519d06a06c9EfC0F76EF813959Ed2551377",
   "0xA88652cE2B2DfA3e2bD3524a2c77c6EA5F199372",
 ];
-
 // create object key by accounts array
 walletData = walletData.reduce((acc, cur, i) => {
   acc[accounts[i]] = { ...cur, walletAddress: accounts[i] };
