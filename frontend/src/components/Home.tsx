@@ -5,7 +5,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   const startVoting = () => {
-    navigate("/voting");
+    navigate("/login");
   };
 
   return (

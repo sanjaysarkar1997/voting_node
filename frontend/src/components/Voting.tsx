@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 const Voting = () => {
   const navigate = useNavigate();
   const [accouts, setAccouts] = useState([]);
-  const [chairman, setChairman] = useState("");
-  const [selectCandidate, setSelectCandidate] = useState(false);
+  const [chairman, setChairman] = useState<any>("");
+  const [selectCandidate, setSelectCandidate] = useState(true);
   const [selectedCandidate, setSelectedCandidate] = useState([]);
 
   const deployContract = async () => {
@@ -36,6 +36,11 @@ const Voting = () => {
 
   useEffect(() => {
     getAPI();
+  }, []);
+
+  useEffect(() => {
+    localStorage.getItem("chairperson") &&
+      setChairman(localStorage.getItem("chairperson"));
   }, []);
 
   return (
