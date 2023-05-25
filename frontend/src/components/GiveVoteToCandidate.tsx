@@ -105,7 +105,7 @@ const GiveVoteToCandidate = () => {
       {state === "1" &&
         (isVerified ? (
           <List
-            header={<Tag color={"blue"}>Voter Id</Tag>}
+            header={<Tag color={"blue"}>E - Ballot</Tag>}
             bordered
             dataSource={candidates}
             renderItem={(item: any, i) => (
